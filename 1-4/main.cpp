@@ -25,10 +25,10 @@ int volumeCreditsFor(json_object *playObj, int audience);
 
 int totalVolumeCredits(json_object *performancesObj, json_object *plays);
 int totalAmount(json_object *performancesObj, json_object *plays);
+string writeBill(json_object *performancesObj, json_object *plays);
 
 
 string statement(json_object *invoice, json_object *plays){
-
 	int performanceLength;
 
 	json_object *customerNameObj;
@@ -50,6 +50,21 @@ string statement(json_object *invoice, json_object *plays){
 	performanceLength = json_object_array_length(performancesObj);
 
 
+	result += writeBill(performancesObj, plays);
+	result += "Total payment: $" + to_string(totalAmount(performancesObj, plays) / 100) + "\n";
+	result += "Saved points: " + to_string(totalVolumeCredits(performancesObj, plays)) + " points\n";
+
+	return result;
+}
+
+string writeBill(json_object *performancesObj, json_object *plays){
+	string result = "";
+
+	int audience;
+	int performanceLength = json_object_array_length(performancesObj);
+
+	json_object *playObj;
+	json_object *aPerformanceObj;
 	for (int i = 0; i < performanceLength; i++){
 		aPerformanceObj = aPerformanceObjFor(performancesObj, i);
 		playObj = playObjFor(plays, aPerformanceObj);
@@ -60,16 +75,13 @@ string statement(json_object *invoice, json_object *plays){
 			   " (" + to_string(audience) + " seats)\n"; 
 
 	}
-
-	result += "Total payment: $" + to_string(totalAmount(performancesObj, plays) / 100) + "\n";
-	result += "Saved points: " + to_string(totalVolumeCredits(performancesObj, plays)) + " points\n";
-
 	return result;
 }
 
 int totalAmount(json_object *performancesObj, json_object *plays){
-	int audience;
 	int result = 0;
+
+	int audience;
 	int performanceLength = json_object_array_length(performancesObj);
 
 	json_object *playObj;
@@ -90,8 +102,9 @@ int totalAmount(json_object *performancesObj, json_object *plays){
 	
 
 int totalVolumeCredits(json_object *performancesObj, json_object *plays){
-	int audience;
 	int result = 0;
+
+	int audience;
 	int performanceLength = json_object_array_length(performancesObj);
 
 	json_object *playObj;
@@ -125,6 +138,30 @@ int volumeCreditsFor(json_object *playObj, int audience){
 	return result;
 }
 
+int amountFor(string type, int audience){
+	int result = 0;
+
+	if (strcmp(type.c_str(), "tragedy") == 0){
+		result = 40000;
+		if (audience > 30){
+			result += 1000 * (audience - 30);
+		}
+	}
+
+	else if (strcmp(type.c_str(), "comedy") == 0){
+		result = 30000;
+		if (audience > 20){
+			result += 10000 + 500 * (audience - 20);
+		}
+		result += 300 * audience;
+
+	}
+	else{
+		cout << "Error: Unkown type" << endl;
+	}
+
+	return result;
+}
 
 json_object *aPerformanceObjFor(json_object *performancesObj, int index){
 	return json_object_array_get_idx(performancesObj, index);
@@ -165,32 +202,6 @@ string nameFor(json_object *playObj){
 
 int audienceFor(json_object *aPerformance){
 	return json_object_get_int(audienceObjFor(aPerformance));
-}
-
-
-int amountFor(string type, int audience){
-	int result = 0;
-
-	if (strcmp(type.c_str(), "tragedy") == 0){
-		result = 40000;
-		if (audience > 30){
-			result += 1000 * (audience - 30);
-		}
-	}
-
-	else if (strcmp(type.c_str(), "comedy") == 0){
-		result = 30000;
-		if (audience > 20){
-			result += 10000 + 500 * (audience - 20);
-		}
-		result += 300 * audience;
-
-	}
-	else{
-		cout << "Error: Unkown type" << endl;
-	}
-
-	return result;
 }
 
 
