@@ -23,9 +23,11 @@ int audienceFor(json_object *aPerformance);
 int amountFor(string type, int audience);
 int volumeCreditsFor(json_object *playObj, int audience);
 
+int totalVolumeCredits(json_object *performancesObj, json_object *plays);
+
+
 string statement(json_object *invoice, json_object *plays){
 	int totalAmount = 0;
-	int volumeCredits;
 
 	int performanceLength;
 
@@ -49,12 +51,8 @@ string statement(json_object *invoice, json_object *plays){
 
 	for (int i = 0; i < performanceLength; i++){
 		aPerformanceObj = aPerformanceObjFor(performancesObj, i);
-
 		playObj = playObjFor(plays, aPerformanceObj);
-
 		audience = audienceFor(aPerformanceObj);
-
-		volumeCredits += volumeCreditsFor(playObj, audience);
 
 		//Print bill
 		result += " " + nameFor(playObj) + ": $" + \
@@ -65,10 +63,32 @@ string statement(json_object *invoice, json_object *plays){
 
 	}
 
+	int volumeCredits = totalVolumeCredits(performancesObj, plays);
+
 	result += "Total payment: $" + to_string(totalAmount / 100) + "\n";
 	result += "Saved points: " + to_string(volumeCredits) + " points\n";
 
 	return result;
+}
+
+
+int totalVolumeCredits(json_object *performancesObj, json_object *plays){
+	int audience;
+	int volumeCredits = 0;
+	int performanceLength = json_object_array_length(performancesObj);
+
+	json_object *playObj;
+	json_object *aPerformanceObj;
+
+	for (int i = 0; i < performanceLength; i++){
+		aPerformanceObj = aPerformanceObjFor(performancesObj, i);
+		playObj = playObjFor(plays, aPerformanceObj);
+		audience = audienceFor(aPerformanceObj);
+		volumeCredits += volumeCreditsFor(playObj, audience);
+	}
+
+	return volumeCredits;
+
 }
 
 
