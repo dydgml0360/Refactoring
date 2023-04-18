@@ -27,7 +27,7 @@ string statement(json_object *invoice, json_object *plays){
 	json_object *customerNameObj;
 	json_object *performancesObj, *aPerformanceObj;
 	json_object *playIDObj, *playObj;
-	json_object *typeObj, *nameObj;
+	json_object *nameObj;
 	json_object *audienceObj;
 
 	string customerName;
@@ -53,22 +53,20 @@ string statement(json_object *invoice, json_object *plays){
 
 		playObj = json_object_object_get(plays, playIDFor(aPerformanceObj).c_str());
 
-		type = typeFor(playObj);
-
 		nameObj = json_object_object_get(playObj, "name");
 		name = json_object_get_string(nameObj);
 
 		audienceObj = json_object_object_get(aPerformanceObj, "audience");
 		audience = json_object_get_int(audienceObj);
 
-		thisAmount = amountFor(type, audience);
+		thisAmount = amountFor(typeFor(playObj), audience);
 
 		//Save point
 		if (audience - 30 > 0)
 			volumeCredits += audience - 30;
 		
 		//Offer point for every 5 people about comedy customer
-		if (strcmp(type.c_str(), "comedy") != 0)
+		if (strcmp(typeFor(playObj).c_str(), "comedy") != 0)
 			volumeCredits += audience / 5;
 		
 		//Print bill
