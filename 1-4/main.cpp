@@ -24,7 +24,7 @@ int amountFor(string type, int audience);
 int volumeCreditsFor(json_object *playObj, int audience);
 
 int totalVolumeCredits(json_object *performancesObj, json_object *plays);
-int mintChocolateKimchi(json_object *performancesObj, json_object *plays);
+int totalAmount(json_object *performancesObj, json_object *plays);
 
 
 string statement(json_object *invoice, json_object *plays){
@@ -49,7 +49,7 @@ string statement(json_object *invoice, json_object *plays){
 
 	performanceLength = json_object_array_length(performancesObj);
 
-	int totalAmount = mintChocolateKimchi(performancesObj, plays);
+	int totalAmountResult = totalAmount(performancesObj, plays);
 
 	for (int i = 0; i < performanceLength; i++){
 		aPerformanceObj = aPerformanceObjFor(performancesObj, i);
@@ -62,13 +62,13 @@ string statement(json_object *invoice, json_object *plays){
 
 	}
 
-	result += "Total payment: $" + to_string(totalAmount / 100) + "\n";
+	result += "Total payment: $" + to_string(totalAmountResult / 100) + "\n";
 	result += "Saved points: " + to_string(totalVolumeCredits(performancesObj, plays)) + " points\n";
 
 	return result;
 }
 
-int mintChocolateKimchi(json_object *performancesObj, json_object *plays){
+int totalAmount(json_object *performancesObj, json_object *plays){
 	int audience;
 	int result = 0;
 	int performanceLength = json_object_array_length(performancesObj);
