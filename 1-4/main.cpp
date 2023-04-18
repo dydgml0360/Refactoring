@@ -14,10 +14,12 @@ json_object *playObjFor(json_object *plays, json_object *aPerformanceObj);
 json_object *playIDObjFor(json_object *aPerformanceObj);
 json_object *typeObjFor(json_object *playObj);
 json_object *nameObjFor(json_object *playObj);
+json_object *audienceObjFor(json_object *aPerformanceObj);
 
 string playIDFor(json_object *aPerformanceObj);
 string typeFor(json_object *playObj);
 string nameFor(json_object *playObj);
+int audienceFor(json_object *aPerformance);
 
 string statement(json_object *invoice, json_object *plays){
 	int totalAmount = 0;
@@ -54,8 +56,9 @@ string statement(json_object *invoice, json_object *plays){
 
 		playObj = playObjFor(plays, aPerformanceObj);
 
-		audienceObj = json_object_object_get(aPerformanceObj, "audience");
-		audience = json_object_get_int(audienceObj);
+		//audienceObj = json_object_object_get(aPerformanceObj, "audience");
+		//audience = json_object_get_int(audienceObj);
+		audience = audienceFor(aPerformanceObj);
 
 		thisAmount = amountFor(typeFor(playObj), audience);
 
@@ -100,6 +103,11 @@ json_object *nameObjFor(json_object *playObj){
 	return json_object_object_get(playObj, "name");
 }
 
+json_object *audienceObjFor(json_object *aPerformanceObj){
+	return json_object_object_get(aPerformanceObj, "audience");
+}
+
+
 string playIDFor(json_object *aPerformanceObj){
 	return json_object_get_string(playIDObjFor(aPerformanceObj));
 }
@@ -111,6 +119,11 @@ string typeFor(json_object *playObj){
 string nameFor(json_object *playObj){
 	return json_object_get_string(nameObjFor(playObj));
 }
+
+int audienceFor(json_object *aPerformance){
+	return json_object_get_int(audienceObjFor(aPerformance));
+}
+
 
 int amountFor(string type, int audience){
 	int result = 0;
