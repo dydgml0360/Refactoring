@@ -7,8 +7,8 @@
 
 using namespace std;
 
-#define tragedy "tragedy"
-#define comedy "comedy"
+
+int amountFor(string type, int audience);
 
 string statement(json_object *invoice, json_object *plays){
 	int totalAmount = 0;
@@ -58,23 +58,7 @@ string statement(json_object *invoice, json_object *plays){
 		audienceObj = json_object_object_get(perfObj, "audience");
 		audience = json_object_get_int(audienceObj);
 
-		if (strcmp(type.c_str(), "tragedy") == 0){
-			thisAmount = 40000;
-			if (audience > 30){
-				thisAmount += 1000 * (audience - 30);
-			}
-		}
-		else if (strcmp(type.c_str(), "comedy") == 0){
-			thisAmount = 30000;
-			if (audience > 20){
-				thisAmount += 10000 + 500 * (audience - 20);
-			}
-			thisAmount += 300 * audience;
-
-		}
-		else{
-			cout << "Error: Unkown type" << endl;
-		}
+		thisAmount = amountFor(type, audience);
 
 		//Save point
 		if (audience - 30 > 0)
@@ -94,6 +78,33 @@ string statement(json_object *invoice, json_object *plays){
 
 	return result;
 }
+
+
+int amountFor(string type, int audience){
+	int result = 0;
+
+	if (strcmp(type.c_str(), "tragedy") == 0){
+		result = 40000;
+		if (audience > 30){
+			result += 1000 * (audience - 30);
+		}
+	}
+
+	else if (strcmp(type.c_str(), "comedy") == 0){
+		result = 30000;
+		if (audience > 20){
+			result += 10000 + 500 * (audience - 20);
+		}
+		result += 300 * audience;
+
+	}
+	else{
+		cout << "Error: Unkown type" << endl;
+	}
+
+	return result;
+}
+
 
 int main(){
 
