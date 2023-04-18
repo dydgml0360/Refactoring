@@ -63,10 +63,8 @@ string statement(json_object *invoice, json_object *plays){
 
 	}
 
-	int volumeCredits = totalVolumeCredits(performancesObj, plays);
-
 	result += "Total payment: $" + to_string(totalAmount / 100) + "\n";
-	result += "Saved points: " + to_string(volumeCredits) + " points\n";
+	result += "Saved points: " + to_string(totalVolumeCredits(performancesObj, plays)) + " points\n";
 
 	return result;
 }
