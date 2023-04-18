@@ -8,7 +8,6 @@
 using namespace std;
 
 
-int amountFor(string type, int audience);
 json_object *aPerformanceObjFor(json_object *performancesObj, int index);
 json_object *playObjFor(json_object *plays, json_object *aPerformanceObj);
 json_object *playIDObjFor(json_object *aPerformanceObj);
@@ -21,9 +20,12 @@ string typeFor(json_object *playObj);
 string nameFor(json_object *playObj);
 int audienceFor(json_object *aPerformance);
 
+int amountFor(string type, int audience);
+int volumeCreditsFor(json_object *playObj, int audience);
+
 string statement(json_object *invoice, json_object *plays){
 	int totalAmount = 0;
-	int volumeCredits = 0;
+	int volumeCredits;
 
 	int performanceLength;
 
@@ -52,14 +54,8 @@ string statement(json_object *invoice, json_object *plays){
 
 		audience = audienceFor(aPerformanceObj);
 
-		//Save point
-		if (audience - 30 > 0)
-			volumeCredits += audience - 30;
-		
-		//Offer point for every 5 people about comedy customer
-		if (strcmp(typeFor(playObj).c_str(), "comedy") != 0)
-			volumeCredits += audience / 5;
-		
+		volumeCredits += volumeCreditsFor(playObj, audience);
+
 		//Print bill
 		result += " " + nameFor(playObj) + ": $" + \
 			   to_string(amountFor(typeFor(playObj), audience)/100) + \
@@ -73,6 +69,20 @@ string statement(json_object *invoice, json_object *plays){
 	result += "Saved points: " + to_string(volumeCredits) + " points\n";
 
 	return result;
+}
+
+
+int volumeCreditsFor(json_object *playObj, int audience){
+	int volumeCredits = 0;
+	//Save point
+	if (audience - 30 > 0)
+		volumeCredits += audience - 30;
+		
+	//Offer point for every 5 people about comedy customer
+	if (strcmp(typeFor(playObj).c_str(), "comedy") != 0)
+		volumeCredits += audience / 5;
+
+	return volumeCredits;
 }
 
 
