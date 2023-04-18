@@ -73,16 +73,19 @@ string statement(json_object *invoice, json_object *plays){
 
 
 int volumeCreditsFor(json_object *playObj, int audience){
-	int volumeCredits = 0;
+	int result = 0;
 	//Save point
-	if (audience - 30 > 0)
-		volumeCredits += audience - 30;
+	if (audience - 30 > 0){
+		result += audience - 30;
+	}
 		
 	//Offer point for every 5 people about comedy customer
 	if (strcmp(typeFor(playObj).c_str(), "comedy") != 0)
-		volumeCredits += audience / 5;
+	{
+		result += audience / 5;
+	}
 
-	return volumeCredits;
+	return result;
 }
 
 
