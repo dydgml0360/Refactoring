@@ -47,7 +47,6 @@ string statement(json_object *invoice, json_object *plays){
 		playID = json_object_get_string(playIDObj);
 
 		playObj = json_object_object_get(plays, playID.c_str());
-		play = json_object_get_string(playObj);
 
 		typeObj = json_object_object_get(playObj, "type");
 		type = json_object_get_string(typeObj);
