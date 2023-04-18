@@ -11,8 +11,12 @@ using namespace std;
 int amountFor(string type, int audience);
 json_object *aPerformanceObjFor(json_object *performancesObj, int index);
 json_object *playIDObjFor(json_object *aPerformanceObj);
+json_object *typeObjFor(json_object *playObj);
+json_object *nameObjFor(json_object *playObj);
 
 string playIDFor(json_object *aPerformanceObj);
+string typeFor(json_object *playObj);
+string nameFor(json_object *playObj);
 
 string statement(json_object *invoice, json_object *plays){
 	int totalAmount = 0;
@@ -49,8 +53,7 @@ string statement(json_object *invoice, json_object *plays){
 
 		playObj = json_object_object_get(plays, playIDFor(aPerformanceObj).c_str());
 
-		typeObj = json_object_object_get(playObj, "type");
-		type = json_object_get_string(typeObj);
+		type = typeFor(playObj);
 
 		nameObj = json_object_object_get(playObj, "name");
 		name = json_object_get_string(nameObj);
@@ -89,9 +92,16 @@ json_object *playIDObjFor(json_object *aPerformanceObj){
 	return json_object_object_get(aPerformanceObj, "playID");
 }
 
+json_object *typeObjFor(json_object *playObj){
+		return json_object_object_get(playObj, "type");
+}
 
 string playIDFor(json_object *aPerformanceObj){
 	return json_object_get_string(playIDObjFor(aPerformanceObj));
+}
+
+string typeFor(json_object *playObj){
+	return json_object_get_string(typeObjFor(playObj));
 }
 
 
@@ -122,8 +132,6 @@ int amountFor(string type, int audience){
 
 
 int main(){
-
-
 	json_object *plays = json_object_from_file("./plays.json");
 	json_object *invoice = json_object_from_file("./invoices.json");
 
