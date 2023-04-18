@@ -31,19 +31,11 @@ string writeBill(json_object *performancesObj, json_object *plays);
 
 
 string statement(json_object *invoice, json_object *plays){
-	json_object *customerNameObj;
 	json_object *performancesObj;
-
-	string customerName;
-
-	string result;
-
-	customerName = customerNameFor(invoice);
-
-	result = "Bill info (Customer name: " + customerName + ") \n";
-
 	performancesObj = json_object_object_get(invoice, "performances");
 
+	string result;
+	result = "Bill info (Customer name: " + customerNameFor(invoice) + ") \n";
 	result += writeBill(performancesObj, plays);
 	result += "Total payment: $" + to_string(totalAmount(performancesObj, plays) / 100) + "\n";
 	result += "Saved points: " + to_string(totalVolumeCredits(performancesObj, plays)) + " points\n";
