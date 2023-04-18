@@ -10,6 +10,7 @@ using namespace std;
 
 int amountFor(string type, int audience);
 json_object *aPerformanceObjFor(json_object *performancesObj, int index);
+json_object *playObjFor(json_object *plays, json_object *aPerformanceObj);
 json_object *playIDObjFor(json_object *aPerformanceObj);
 json_object *typeObjFor(json_object *playObj);
 json_object *nameObjFor(json_object *playObj);
@@ -51,7 +52,7 @@ string statement(json_object *invoice, json_object *plays){
 
 		aPerformanceObj = aPerformanceObjFor(performancesObj, i);
 
-		playObj = json_object_object_get(plays, playIDFor(aPerformanceObj).c_str());
+		playObj = playObjFor(plays, aPerformanceObj);
 
 		nameObj = json_object_object_get(playObj, "name");
 		name = json_object_get_string(nameObj);
@@ -85,13 +86,16 @@ json_object *aPerformanceObjFor(json_object *performancesObj, int index){
 	return json_object_array_get_idx(performancesObj, index);
 }
 
+json_object *playObjFor(json_object *plays, json_object *aPerformanceObj){
+	return json_object_object_get(plays, playIDFor(aPerformanceObj).c_str());
+}
 
 json_object *playIDObjFor(json_object *aPerformanceObj){
 	return json_object_object_get(aPerformanceObj, "playID");
 }
 
 json_object *typeObjFor(json_object *playObj){
-		return json_object_object_get(playObj, "type");
+	return json_object_object_get(playObj, "type");
 }
 
 string playIDFor(json_object *aPerformanceObj){
