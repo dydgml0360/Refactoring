@@ -9,6 +9,7 @@ using namespace std;
 
 
 int amountFor(string type, int audience);
+json_object *aPerformanceObjFor(json_object *performancesObj, int index);
 
 string statement(json_object *invoice, json_object *plays){
 	int totalAmount = 0;
@@ -41,7 +42,7 @@ string statement(json_object *invoice, json_object *plays){
 	for (int i = 0; i < performanceLength; i++){
 		int thisAmount = 0;
 
-		aPerformanceObj = json_object_array_get_idx(performancesObj, i);
+		aPerformanceObj = aPerformanceObjFor(performancesObj, i);
 
 		playIDObj = json_object_object_get(aPerformanceObj, "playID");
 		playID = json_object_get_string(playIDObj);
@@ -77,6 +78,12 @@ string statement(json_object *invoice, json_object *plays){
 
 	return result;
 }
+
+
+json_object *aPerformanceObjFor(json_object *performancesObj, int index){
+	return json_object_array_get_idx(performancesObj, index);
+}
+
 
 
 int amountFor(string type, int audience){
