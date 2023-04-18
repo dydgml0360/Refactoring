@@ -54,9 +54,6 @@ string statement(json_object *invoice, json_object *plays){
 
 		playObj = playObjFor(plays, aPerformanceObj);
 
-		nameObj = json_object_object_get(playObj, "name");
-		name = json_object_get_string(nameObj);
-
 		audienceObj = json_object_object_get(aPerformanceObj, "audience");
 		audience = json_object_get_int(audienceObj);
 
@@ -71,7 +68,8 @@ string statement(json_object *invoice, json_object *plays){
 			volumeCredits += audience / 5;
 		
 		//Print bill
-		result += " " + name + ": $" + to_string(thisAmount/100) + " (" + to_string(audience) + " seats)\n"; 
+		result += " " + nameFor(playObj) + ": $" + to_string(thisAmount/100) + \
+			   " (" + to_string(audience) + " seats)\n"; 
 		totalAmount += thisAmount;
 	}
 
@@ -98,6 +96,10 @@ json_object *typeObjFor(json_object *playObj){
 	return json_object_object_get(playObj, "type");
 }
 
+json_object *nameObjFor(json_object *playObj){
+	return json_object_object_get(playObj, "name");
+}
+
 string playIDFor(json_object *aPerformanceObj){
 	return json_object_get_string(playIDObjFor(aPerformanceObj));
 }
@@ -106,6 +108,9 @@ string typeFor(json_object *playObj){
 	return json_object_get_string(typeObjFor(playObj));
 }
 
+string nameFor(json_object *playObj){
+	return json_object_get_string(nameObjFor(playObj));
+}
 
 int amountFor(string type, int audience){
 	int result = 0;
