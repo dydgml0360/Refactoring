@@ -46,15 +46,11 @@ string statement(json_object *invoice, json_object *plays){
 	performanceLength = json_object_array_length(performancesObj);
 
 	for (int i = 0; i < performanceLength; i++){
-		int thisAmount = 0;
-
 		aPerformanceObj = aPerformanceObjFor(performancesObj, i);
 
 		playObj = playObjFor(plays, aPerformanceObj);
 
 		audience = audienceFor(aPerformanceObj);
-
-		thisAmount = amountFor(typeFor(playObj), audience);
 
 		//Save point
 		if (audience - 30 > 0)
@@ -65,9 +61,12 @@ string statement(json_object *invoice, json_object *plays){
 			volumeCredits += audience / 5;
 		
 		//Print bill
-		result += " " + nameFor(playObj) + ": $" + to_string(thisAmount/100) + \
+		result += " " + nameFor(playObj) + ": $" + \
+			   to_string(amountFor(typeFor(playObj), audience)/100) + \
 			   " (" + to_string(audience) + " seats)\n"; 
-		totalAmount += thisAmount;
+
+		totalAmount += amountFor(typeFor(playObj), audience);
+
 	}
 
 	result += "Total payment: $" + to_string(totalAmount / 100) + "\n";
