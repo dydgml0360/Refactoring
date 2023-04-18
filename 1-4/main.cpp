@@ -14,10 +14,12 @@ json_object *playIDObjFor(json_object *aPerformanceObj);
 json_object *typeObjFor(json_object *playObj);
 json_object *nameObjFor(json_object *playObj);
 json_object *audienceObjFor(json_object *aPerformanceObj);
+json_object *customerNameObjFor(json_object *invoice);
 
 string playIDFor(json_object *aPerformanceObj);
 string typeFor(json_object *playObj);
 string nameFor(json_object *playObj);
+string customerNameFor(json_object *invoice);
 int audienceFor(json_object *aPerformance);
 
 int amountFor(string type, int audience);
@@ -29,26 +31,18 @@ string writeBill(json_object *performancesObj, json_object *plays);
 
 
 string statement(json_object *invoice, json_object *plays){
-	int performanceLength;
-
 	json_object *customerNameObj;
-	json_object *performancesObj, *aPerformanceObj;
-	json_object *playObj;
+	json_object *performancesObj;
 
 	string customerName;
-	int audience;
 
 	string result;
 
-	customerNameObj = json_object_object_get(invoice, "customer");
-	customerName = json_object_get_string(customerNameObj);
+	customerName = customerNameFor(invoice);
 
 	result = "Bill info (Customer name: " + customerName + ") \n";
 
 	performancesObj = json_object_object_get(invoice, "performances");
-
-	performanceLength = json_object_array_length(performancesObj);
-
 
 	result += writeBill(performancesObj, plays);
 	result += "Total payment: $" + to_string(totalAmount(performancesObj, plays) / 100) + "\n";
@@ -187,6 +181,9 @@ json_object *audienceObjFor(json_object *aPerformanceObj){
 	return json_object_object_get(aPerformanceObj, "audience");
 }
 
+json_object *customerNameObjFor(json_object *invoice){
+	return json_object_object_get(invoice, "customer");
+}
 
 string playIDFor(json_object *aPerformanceObj){
 	return json_object_get_string(playIDObjFor(aPerformanceObj));
@@ -200,6 +197,9 @@ string nameFor(json_object *playObj){
 	return json_object_get_string(nameObjFor(playObj));
 }
 
+string customerNameFor(json_object *invoice){
+	return json_object_get_string(customerNameObjFor(invoice));
+}
 int audienceFor(json_object *aPerformance){
 	return json_object_get_int(audienceObjFor(aPerformance));
 }
