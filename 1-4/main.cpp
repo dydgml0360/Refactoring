@@ -70,7 +70,7 @@ string statement(json_object *invoice, json_object *plays){
 
 int mintChocolateKimchi(json_object *performancesObj, json_object *plays){
 	int audience;
-	int totalAmount = 0;
+	int result = 0;
 	int performanceLength = json_object_array_length(performancesObj);
 
 	json_object *playObj;
@@ -81,19 +81,18 @@ int mintChocolateKimchi(json_object *performancesObj, json_object *plays){
 		playObj = playObjFor(plays, aPerformanceObj);
 		audience = audienceFor(aPerformanceObj);
 
-
-		totalAmount += amountFor(typeFor(playObj), audience);
+		result += amountFor(typeFor(playObj), audience);
 
 	}
 
-	return totalAmount;
+	return result;
 
 }
 	
 
 int totalVolumeCredits(json_object *performancesObj, json_object *plays){
 	int audience;
-	int volumeCredits = 0;
+	int result = 0;
 	int performanceLength = json_object_array_length(performancesObj);
 
 	json_object *playObj;
@@ -103,11 +102,11 @@ int totalVolumeCredits(json_object *performancesObj, json_object *plays){
 		aPerformanceObj = aPerformanceObjFor(performancesObj, i);
 		playObj = playObjFor(plays, aPerformanceObj);
 		audience = audienceFor(aPerformanceObj);
-		volumeCredits += volumeCreditsFor(playObj, audience);
+
+		result += volumeCreditsFor(playObj, audience);
 	}
 
-	return volumeCredits;
-
+	return result;
 }
 
 
