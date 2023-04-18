@@ -29,13 +29,9 @@ string statement(json_object *invoice, json_object *plays){
 
 	json_object *customerNameObj;
 	json_object *performancesObj, *aPerformanceObj;
-	json_object *playIDObj, *playObj;
-	json_object *nameObj;
-	json_object *audienceObj;
+	json_object *playObj;
 
 	string customerName;
-	string playID, play;
-	string type, name;
 	int audience;
 
 	string result;
@@ -56,8 +52,6 @@ string statement(json_object *invoice, json_object *plays){
 
 		playObj = playObjFor(plays, aPerformanceObj);
 
-		//audienceObj = json_object_object_get(aPerformanceObj, "audience");
-		//audience = json_object_get_int(audienceObj);
 		audience = audienceFor(aPerformanceObj);
 
 		thisAmount = amountFor(typeFor(playObj), audience);
