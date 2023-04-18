@@ -42,9 +42,7 @@ string statement(json_object *invoice, json_object *plays){
 	for (int i = 0; i < performanceLength; i++){
 		int thisAmount = 0;
 
-		aPerformanceObj = aPerformanceObjFor(performancesObj, i);
-
-		playIDObj = json_object_object_get(aPerformanceObj, "playID");
+		playIDObj = json_object_object_get(aPerformanceObjFor(performancesObj, i), "playID");
 		playID = json_object_get_string(playIDObj);
 
 		playObj = json_object_object_get(plays, playID.c_str());
@@ -55,7 +53,7 @@ string statement(json_object *invoice, json_object *plays){
 		nameObj = json_object_object_get(playObj, "name");
 		name = json_object_get_string(nameObj);
 
-		audienceObj = json_object_object_get(aPerformanceObj, "audience");
+		audienceObj = json_object_object_get(aPerformanceObjFor(performancesObj, i), "audience");
 		audience = json_object_get_int(audienceObj);
 
 		thisAmount = amountFor(type, audience);
