@@ -46,8 +46,7 @@ string statement(json_object *invoice, json_object *plays){
 		aPerformanceObj = aPerformanceObjFor(performancesObj, i);
 
 		//playIDObj = json_object_object_get(aPerformanceObj, "playID");
-		playIDObj = playIDObjFor(aPerformanceObj);
-		playID = json_object_get_string(playIDObj);
+		playID = json_object_get_string(playIDObjFor(aPerformanceObj));
 
 		playObj = json_object_object_get(plays, playID.c_str());
 
